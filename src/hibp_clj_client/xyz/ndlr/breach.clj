@@ -3,7 +3,8 @@
     [clojure.set :as set]))
 
 (defn get-for-account 
-  "can use :domain, :truncate-response and :include-unverified to filter"
+  ":domain, :truncate-response and :include-unverified can be used to filter 
+  the response"
   ([account]
     (api/get-body (str "breachedaccount/" account)))
   ([account filter] 
@@ -11,12 +12,12 @@
       (set/rename-keys filter {:truncate-response :truncateResponse
         :include-unverified :includeUnverified}))))
 
-(defn get-all 
-  "domain is optional"
+(defn get-all
   ([] 
-    (get-all nil))
-  ([domain] 
-    (api/get-body "breaches/" {:domain domain})))
+    (api/get-body "breaches"))
+  ([domain]
+    {:pre [(not (nil? domain))]}
+    (api/get-body "breaches" {:domain domain})))
 
 (defn get-for-site
   [site]
