@@ -12,10 +12,13 @@
   ([path]
     (get-body path nil))
   ([path query-params]
-    (:body 
+    (println "query params were: " query-params)
+    (try
+    (:body
       (http/get (str url path) {:accept :json 
         :as :json-kebab-keys 
-        :query-params query-params}))))
+        :query-params query-params}))
+    (catch Exception e nil))))
 
 (defn exists? 
   "check if a resource exists by checking the http status code"
