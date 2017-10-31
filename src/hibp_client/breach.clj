@@ -21,8 +21,9 @@
 
 (defn get-for-name
   [name]
-  {:pre [(not (nil? name))]} 
-  (api/get-body (str "breach/" name)))
+    {:pre [(not (nil? name))]} 
+    (api/get-body (str "breach/" name)))
 
 (defn get-data-classes
-  [] (api/get-body "dataclasses"))
+  [] 
+    (api/get-body "dataclasses"))

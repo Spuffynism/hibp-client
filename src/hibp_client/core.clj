@@ -1,5 +1,5 @@
 (ns hibp-client.core
-  (:require [hibp-client.breach :as breach]))
+  (:require [hibp-client.pwned-password :as pwned-password]))
 
 (defn -main [& args]
-  (println (breach/get-data-classes)))
+  (println (pwned-password/pwned? "12345")))

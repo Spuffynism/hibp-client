@@ -12,17 +12,22 @@
   ([path]
     (get-body path nil))
   ([path query-params]
-    (println "query params were: " query-params)
     (try
-    (:body
-      (http/get (str url path) {:accept :json 
-        :as :json-kebab-keys 
-        :query-params query-params}))
-    (catch Exception e nil))))
+      (:body
+        (http/get (str url path) {:accept :json 
+          :as :json-kebab-keys 
+          :query-params query-params}))
+      (catch Exception e nil))))
 
 (defn exists? 
   "check if a resource exists by checking the http status code"
-  [path query-params]
-  (http/get (str url path) {:accept :json 
-    :as :json-kebab-keys 
-    :query-params query-params}))
+  ([path form-params]
+    (exists? path form-params nil))
+  ([path form-params query-params]
+    (try 
+      (def status 
+        (:status (http/post (str url path) {:content-type :x-www-form-urlencoded
+          :query-params query-params  
+          :form-params form-params})))
+      (= status 200)
+      (catch Exception e false))))

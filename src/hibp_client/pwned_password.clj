@@ -1,7 +1,11 @@
-(ns hibp-client.pwned-password)
+(ns hibp-client.pwned-password
+  (:require [hibp-client.api :as api]))
 
-;TODO: React to 200 or 404 code
-;TODO: send not in url
-(defn pwned? 
-  "original-password-is-a-hash is optional"
-  [password original-password-is-a-hash] (do))
+(defn pwned?
+  ([password]
+    {:pre [(not (nil? password))]}
+    (api/exists? "pwnedpassword/" {:Password password}))
+  ([password original-password-is-a-hash] 
+    {:pre [(not (nil? password))]}
+    (api/exists? "pwnedpassword/" {:Password password}
+      {:originalPasswordIsAHash original-password-is-a-hash})))
