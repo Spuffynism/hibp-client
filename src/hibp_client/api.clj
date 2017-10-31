@@ -20,13 +20,14 @@
       (catch Exception e nil))))
 
 (defn exists? 
-  "check if a resource exists by checking the http status code"
+  "indicates if a resource exists by checking the http status code"
   ([path form-params]
     (exists? path form-params nil))
   ([path form-params query-params]
     (try 
       (def status 
-        (:status (http/post (str url path) {:content-type :x-www-form-urlencoded
+        (:status (http/post (str url path) {
+          :content-type :x-www-form-urlencoded
           :query-params query-params  
           :form-params form-params})))
       (= status 200)
