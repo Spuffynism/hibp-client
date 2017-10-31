@@ -19,10 +19,10 @@
     {:pre [(not (nil? domain))]}
     (api/get-body "breaches" {:domain domain})))
 
-(defn get-for-site
-  [site]
-  {:pre [(not (nil? site))]} 
-  (api/get-body (str "breach/" site)))
+(defn get-for-name
+  [name]
+  {:pre [(not (nil? name))]} 
+  (api/get-body (str "breach/" name)))
 
 (defn get-data-classes
   [] (do))
