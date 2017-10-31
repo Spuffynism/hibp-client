@@ -1,4 +1,4 @@
-(ns hibp-clj-client.xyz.ndlr.paste)
+(ns hibp-client.paste)
 
 (defn get-for-account 
   [this account] (do))

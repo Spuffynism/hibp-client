@@ -1,4 +1,4 @@
-(ns hibp-clj-client.xyz.ndlr.pwned-password)
+(ns hibp-client.pwned-password)
 
 ;TODO: React to 200 or 404 code
 ;TODO: send not in url

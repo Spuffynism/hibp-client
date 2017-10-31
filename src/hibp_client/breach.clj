@@ -1,5 +1,5 @@
-(ns hibp-clj-client.xyz.ndlr.breach
-  (:require [hibp-clj-client.xyz.ndlr.api :as api]
+(ns hibp-client.breach
+  (:require [hibp-client.api :as api]
     [clojure.set :as set]))
 
 (defn get-for-account 
@@ -25,4 +25,4 @@
   (api/get-body (str "breach/" name)))
 
 (defn get-data-classes
-  [] (do))
+  [] (api/get-body "dataclasses"))

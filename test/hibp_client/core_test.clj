@@ -1,6 +1,6 @@
-(ns hibp-clj-client.xyz.ndlr.core-test
+(ns hibp-client.core-test
   (:require [clojure.test :refer :all]
-            [hibp-clj-client.xyz.ndlr.core :refer :all]))
+            [hibp-client.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."

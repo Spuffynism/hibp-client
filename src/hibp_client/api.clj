@@ -1,4 +1,4 @@
-(ns hibp-clj-client.xyz.ndlr.api
+(ns hibp-client.api
     (:require [clj-http.client :as http]
         [camel-snake-kebab.core :refer [->kebab-case-keyword]]))
 
