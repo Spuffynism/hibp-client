@@ -1,6 +1,5 @@
 (ns hibp-client.breach
-  (:require [hibp-client.api :as api]
-    [clojure.set :as set]))
+  (:require [hibp-client.api :as api]))
 
 (defn get-for-account 
   ":domain, :truncate-response and :include-unverified can be used to filter 
