@@ -1,6 +1,6 @@
 (defproject hibp-client "0.1.0-SNAPSHOT"
   :description "Have I been pwned clojure client"
-  :url "https://gitlab.com/ndlr/hibp-clj-client"
+  :url "https://github.com/Spuffynism/hibp-client"
   :license {:name "MIT License"
             :url "https://choosealicense.com/licenses/mit/"}
   :dependencies [[org.clojure/clojure "1.8.0"]
