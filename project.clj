@@ -7,4 +7,4 @@
     [clj-http "3.7.0"]
     [cheshire "5.8.0"]
     [camel-snake-kebab "0.4.0"]]
-  :main hibp-client.core)
+  :main hibp-client.examples)
