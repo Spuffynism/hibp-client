@@ -1,14 +1,13 @@
 # hibp-clj-client
 
-A Clojure library designed to ... well, that part is up to you.
+hibp-client is a clojure library that wraps the [Have I been pwned API](https://haveibeenpwned.com/API/v2).
 
 ## Usage
 
-FIXME
+See [examples](src/hibp_client/examples.clj).
 
-## License
-
-Copyright © 2017 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.
+## TODO
+ - replace `core.clj` file for `examples.clj` & fill with examples
+ - add documentation for functions
+ - add ability to set user agent
+ - write tests
