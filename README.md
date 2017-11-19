@@ -4,8 +4,7 @@ hibp-client is a clojure library that wraps the [Have I been pwned API](https://
 
 ## Usage
 
-See [examples](src/hibp_client/examples.clj).
-
+See [examples](test/hibp_client/examples.clj).
 
 ## Installation
 

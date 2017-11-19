@@ -1,4 +1,5 @@
 (ns hibp-client.examples
+  (:gen-class)
   (:require [hibp-client.pwned-password :as pwned-password]
     [hibp-client.breach :as breach]
     [hibp-client.paste :as paste]))
