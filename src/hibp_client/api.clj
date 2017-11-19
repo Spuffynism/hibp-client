@@ -25,10 +25,10 @@
     (exists? path form-params nil))
   ([path form-params query-params]
     (try 
-      (def status 
+      (let [ status
         (:status (http/post (str url path) {
           :content-type :x-www-form-urlencoded
           :query-params query-params  
-          :form-params form-params})))
-      (= status 200)
+          :form-params form-params}))]
+        (= status 200))
       (catch Exception e false))))
