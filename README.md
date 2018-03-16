@@ -10,6 +10,13 @@ See [examples](test/hibp_client/examples.clj).
 
 hibp-client is available as a Maven artifacto from [Clojars](https://clojars.org/hibp-client).
 
+## Running tests
+Start a lein repl with `lein repl` and then run:
+```
+(require '[clojure.test :refer [run-tests]])
+(require 'hibp-client.all-test :reload-all)
+(run-tests 'hibp-client.all-test)
+```
 ## TODO
  - add ability to set user agent
  - write tests
