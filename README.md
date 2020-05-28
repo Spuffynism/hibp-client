@@ -8,7 +8,7 @@ See [examples](test/hibp_client/examples.clj).
 
 ## Installation
 
-hibp-client is available as a Maven artifacto from [Clojars](https://clojars.org/hibp-client).
+hibp-client is available as a Maven artifact from [Clojars](https://clojars.org/hibp-client).
 
 ## Running tests
 Start a lein repl with `lein repl` and then run:
