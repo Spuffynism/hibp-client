@@ -1,28 +1,65 @@
 (ns hibp-client.api-test
   (:require [clojure.test :refer :all]
-            [hibp-client.api :refer :all]))
-
-(def user-agent-header "user-agent")
+            [hibp-client.api :refer :all]
+            [clj-http.client :as http]))
 
 (deftest default-headers-test
-
-  (testing "given no headers"
-    (testing "specifies user agent"
+  (let [user-agent-header "user-agent"]
+    (testing "given no headers, specifies default user agent"
       (let [headers (default-headers nil)
             expected-user-agent "hibp-client"]
         (is (contains? headers user-agent-header))
-        (is (= (headers user-agent-header) expected-user-agent)))))
+        (is (= (headers user-agent-header) expected-user-agent))))
 
-  (testing "given user agent header"
-    (testing "overrides user-agent header"
+    (testing "given user agent header, overrides user-agent header"
       (let [user-agent "test user agent"
             headers (default-headers {user-agent-header user-agent})]
-        (is (= (headers user-agent-header) user-agent)))))
+        (is (= (headers user-agent-header) user-agent))))
 
-  (testing "given custom headers"
-    (testing "merges custom headers to default headers"
+    (testing "given custom headers, merges custom headers to default headers"
       (let [custom-header "test-header"
             custom-header-value "test header value"
             custom-headers {custom-header custom-header-value}
             headers (default-headers custom-headers)]
         (is (= (headers custom-header) custom-header-value))))))
+
+;; Helper function to test http/get's path
+(defn get-path-as-body
+  [path _]
+  {:body path})
+
+;; Helper function to test http/get's configuration
+(defn get-configuration-as-body
+  [_ configuration]
+  {:body configuration})
+
+(deftest get-json-body-test
+
+  (with-redefs [http/get get-path-as-body]
+    (testing "complete path is built from path and api url"
+      (is (= (get-json-body "/test") (str hibp-api-url "/test"))))
+
+    (testing "overrides path with complete path"
+      (is (= (get-json-body "overriden_path" {:complete-path "complete_path"})
+             "complete_path"))))
+
+  (with-redefs [http/get get-configuration-as-body]
+    (testing "handles json"
+      (let [{accept :accept as :as} (get-json-body nil)]
+        (is (= accept :json))
+        (is (= as :json-kebab-keys))))
+
+    (testing "uses api-key if provided"
+      (let [api-key "api key"]
+        (is (= ((:headers (get-json-body "" {:api-key api-key})) "hibp-api-key")
+               api-key))))
+
+    (testing "uses query params"
+      (let [query-params {:param "value"}]
+        (is (= (:query-params (get-json-body "" {:query-params query-params}))
+               query-params)))))
+
+  (testing "catches http exception"
+    (let [exception-message "exception message"]
+      (with-redefs [http/get (fn [_ _] (throw (Exception. exception-message)))]
+        (is (= (get-json-body "") (str "Caught exception: " exception-message)))))))
