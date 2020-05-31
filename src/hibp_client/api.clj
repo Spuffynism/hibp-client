@@ -10,37 +10,25 @@
 (defmethod http/coerce-response-body :json-kebab-keys [req resp]
   (http/coerce-json-body req resp (memoize ->kebab-case-keyword) false))
 
+(defn get-body
+  ([path configuration]
+   (get-body path configuration nil))
+  ([path {:keys [complete-path api-key query-params]} configuration]
+   (try
+     (:body (http/get
+              (or complete-path (str hibp-api-url path))
+              (merge {:headers (default-headers (if api-key {"hibp-api-key" api-key}))
+                      :query-params query-params}
+                     configuration)))
+     (catch Exception e
+       (str "Caught exception: " (.getMessage e))))))
+
 (defn get-json-body
   "Retrieves the body of a json GET request made to hibp's API"
   ([path]
    (get-json-body path nil))
-  ([path {:keys [complete-path api-key query-params]}]
-   (try
-     (->
-       (http/get
-         (or complete-path (str hibp-api-url path))
-         {:accept :json
-          :headers (default-headers (if api-key {"hibp-api-key" api-key}))
-          :as :json-kebab-keys
-          :query-params query-params})
-       :body)
-     (catch Exception e
-       (str "Caught exception: " (.getMessage e))))))
-
-(defn get-body
-  "Retrieves the body of a json GET request made to hibp's API"
-  ([path]
-   (get-body path nil))
-  ([path {:keys [complete-path api-key query-params]}]
-   (try
-     (->
-       (http/get
-         (or complete-path (str hibp-api-url path))
-         {:headers (default-headers (if api-key {"hibp-api-key" api-key}))
-          :query-params query-params})
-       :body)
-     (catch Exception e
-       (str "Caught exception: " (.getMessage e))))))
+  ([path configuration]
+   (get-body path configuration {:accept :json :as :json-kebab-keys})))
 
 (defn exists?
   "Indicates if a resource exists by checking the http status code"
