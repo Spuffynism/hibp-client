@@ -1,7 +1,8 @@
 (ns hibp-client.api-test
   (:require [clojure.test :refer :all]
             [hibp-client.api :refer :all]
-            [clj-http.client :as http]))
+            [clj-http.client :as http]
+            [hibp-client.api :as api]))
 
 (deftest default-headers-test
   (let [user-agent-header "user-agent"]
@@ -33,33 +34,40 @@
   [_ configuration]
   {:body configuration})
 
-(deftest get-json-body-test
+(deftest get-body-test
 
   (with-redefs [http/get get-path-as-body]
     (testing "complete path is built from path and api url"
-      (is (= (get-json-body "/test") (str hibp-api-url "/test"))))
+      (is (= (get-body "/test" nil) (str hibp-api-url "/test"))))
 
     (testing "overrides path with complete path"
-      (is (= (get-json-body "overriden_path" {:complete-path "complete_path"})
+      (is (= (get-body "overriden_path" {:complete-path "complete_path"})
              "complete_path"))))
 
   (with-redefs [http/get get-configuration-as-body]
-    (testing "handles json"
-      (let [{accept :accept as :as} (get-json-body nil)]
-        (is (= accept :json))
-        (is (= as :json-kebab-keys))))
-
     (testing "uses api-key if provided"
       (let [api-key "api key"]
-        (is (= ((:headers (get-json-body "" {:api-key api-key})) "hibp-api-key")
+        (is (= ((:headers (get-body "" {:api-key api-key})) "hibp-api-key")
                api-key))))
 
     (testing "uses query params"
       (let [query-params {:param "value"}]
-        (is (= (:query-params (get-json-body "" {:query-params query-params}))
-               query-params)))))
+        (is (= (:query-params (get-body "" {:query-params query-params}))
+               query-params))))
+
+    (testing "merges extra configuration"
+      (let [extra-configuration {:parameter "configuration parameter value"}]
+        (is (= (:parameter (get-body "" nil extra-configuration))
+               "configuration parameter value")))))
 
   (testing "catches http exception"
     (let [exception-message "exception message"]
       (with-redefs [http/get (fn [_ _] (throw (Exception. exception-message)))]
-        (is (= (get-json-body "") (str "Caught exception: " exception-message)))))))
+        (is (= (get-body "" nil) (str "Caught exception: " exception-message)))))))
+
+(deftest get-json-body-test
+  (testing "handles json"
+    (with-redefs [http/get get-configuration-as-body]
+      (let [{accept :accept as :as} (get-json-body nil)]
+        (is (= accept :json))
+        (is (= as :json-kebab-keys))))))
