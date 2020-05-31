@@ -1,35 +1,38 @@
 (ns hibp-client.breach
   (:require [hibp-client.api :as api]
-    [clojure.set :as set]))
+            [clojure.set :as set]))
 
 (defn get-for-account
   "Gets breaches for a specific account. :domain, :truncate-response and 
   :include-unverified can be specified to filter the response"
-  {:see "https://haveibeenpwned.com/api/v2/#BreachesForAccount"}
-  ([account]
-    (get-for-account account {}))
-  ([account filter]
-    (api/get-body (str "breachedaccount/" account)
-      (set/rename-keys filter {:truncate-response :truncateResponse
-        :include-unverified :includeUnverified}))))
+  {:see "https://haveibeenpwned.com/API/v3#BreachesForAccount"}
+  ([api-key account]
+   (get-for-account api-key account {}))
+  ([api-key account filter]
+   (let [params {:query-params (set/rename-keys filter {:truncate-response :truncateResponse
+                                                        :include-unverified :includeUnverified})
+                 :api-key api-key}]
+     (api/get-json-body (str "/breachedaccount/" account) params))))
 
 (defn get-all
   "Gets all breaches. A domain name can be specified to filter the response"
-  {:see "https://haveibeenpwned.com/api/v2/#AllBreaches"}
+  {:see "https://haveibeenpwned.com/API/v3#AllBreaches"}
   ([]
-    (get-all nil))
+   (get-all nil))
   ([domain]
-    (api/get-body "breaches" (if domain {:domain domain} {}))))
+   (api/get-json-body
+     "/breaches"
+     (if domain {:query-params {:domain domain}}))))
 
 (defn get-for-name
   "Gets a breach by its name"
-  {:see "https://haveibeenpwned.com/api/v2/#SingleBreach"}
+  {:see "https://haveibeenpwned.com/API/v3#SingleBreach"}
   [name]
-    {:pre [(not (nil? name))]}
-    (api/get-body (str "breach/" name)))
+  {:pre [(not (nil? name))]}
+  (api/get-json-body (str "/breach/" name)))
 
 (defn get-data-classes
   "Gets all breach data classes"
-  {:see "https://haveibeenpwned.com/api/v2/#AllDataClasses"}
+  {:see "https://haveibeenpwned.com/API/v3#AllDataClasses"}
   []
-    (api/get-body "dataclasses"))
+  (api/get-json-body "/dataclasses"))
