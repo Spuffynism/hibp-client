@@ -1,4 +1,4 @@
-(defproject hibp-client "1.0.1"
+(defproject hibp-client "2.0.0"
   :description "Have I been pwned clojure client"
   :url "https://github.com/Spuffynism/hibp-client"
   :license {:name "The MIT License"
