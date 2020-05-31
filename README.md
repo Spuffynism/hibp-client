@@ -13,14 +13,19 @@ Some calls need an api key. See [Authorisation](https://haveibeenpwned.com/API/v
 hibp-client is available as a Maven artifact from [Clojars](https://clojars.org/hibp-client).
 
 ## Running tests
-Start a lein repl with `lein repl` and then run:
 
-```
-(require '[clojure.test :refer [run-tests]])
-(require 'hibp-client.all-test :reload-all)
-(run-tests 'hibp-client.all-test)
-```
+Run unit tests with `lein test`
+
+Run integration tests with `lein test :integration`
 
 ## TODO
 
- - write tests
+ - write unit tests
+    - api
+    - breach
+    - paste
+    - pwned_password
+ - write integration tests
+    - breach
+    - paste
+    - pwned_password
