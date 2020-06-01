@@ -38,7 +38,7 @@
        (http/post
          (str hibp-api-url path)
          {:content-type :x-www-form-urlencoded
-          :headers (default-headers {})
+          :headers (default-headers nil)
           :query-params query-params
           :form-params form-params})
        :status

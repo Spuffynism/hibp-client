@@ -25,18 +25,18 @@
         (is (= (headers custom-header) custom-header-value))))))
 
 ;; Helper function to test http/get's path
-(defn get-path-as-body
+(defn map-path-to-body
   [path _]
   {:body path})
 
 ;; Helper function to test http/get's configuration
-(defn get-configuration-as-body
+(defn map-configuration-to-body
   [_ configuration]
   {:body configuration})
 
 (deftest get-body-test
 
-  (with-redefs [http/get get-path-as-body]
+  (with-redefs [http/get map-path-to-body]
     (testing "complete path is built from path and api url"
       (is (= (get-body "/test" nil) (str hibp-api-url "/test"))))
 
@@ -44,7 +44,7 @@
       (is (= (get-body "overriden_path" {:complete-path "complete_path"})
              "complete_path"))))
 
-  (with-redefs [http/get get-configuration-as-body]
+  (with-redefs [http/get map-configuration-to-body]
     (testing "uses api-key if provided"
       (let [api-key "api key"]
         (is (= ((:headers (get-body "" {:api-key api-key})) "hibp-api-key")
@@ -67,7 +67,42 @@
 
 (deftest get-json-body-test
   (testing "handles json"
-    (with-redefs [http/get get-configuration-as-body]
+    (with-redefs [http/get map-configuration-to-body]
       (let [{accept :accept as :as} (get-json-body nil)]
         (is (= accept :json))
         (is (= as :json-kebab-keys))))))
+
+(deftest exists-test
+  (testing "confirms existence if status is OK"
+    (with-redefs [http/post (fn [_ _] {:status 200})]
+      (is (exists? nil nil))))
+
+  (testing "refutes existence if status is not OK"
+    (with-redefs [http/post (fn [_ _] {:status 500})]
+      (is (not (exists? nil nil)))))
+
+  (testing "refutes existence if http request throws exception"
+    (with-redefs [http/post (fn [_ _] (throw (Exception. "some exception")))]
+      (is (not (exists? nil nil)))))
+
+  (testing "builds path"
+    (let [expected-complete-path (str hibp-api-url "/path")]
+      (with-redefs [http/post (fn [path _] (is (= path expected-complete-path)))]
+        (exists? "/path" nil))))
+
+  (testing "uses default headers"
+    (let [expected-headers (default-headers nil)]
+      (with-redefs [http/post (fn [_ {:keys [headers]}] (is (= headers expected-headers)))]
+        (exists? nil nil))))
+
+  (testing "uses query params"
+    (let [expected-query-params {:param "value"}]
+      (with-redefs [http/post (fn [_ {:keys [query-params]}]
+                                (is (= query-params expected-query-params)))]
+        (exists? nil {:query-params {:param "value"}}))))
+  
+  (testing "uses form params"
+    (let [expected-form-params {:param "value"}]
+      (with-redefs [http/post (fn [_ {:keys [form-params]}]
+                                (is (= form-params expected-form-params)))]
+        (exists? nil {:form-params {:param "value"}})))))
