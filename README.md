@@ -21,7 +21,7 @@ Run integration tests with `lein test :integration`
 ## TODO
 
  - write unit tests
-    - api
+    - ~~api~~
     - breach
     - paste
     - pwned_password
