@@ -26,16 +26,33 @@
           :description "Breach description"
           :is-fabricated false
           :logo-path "https://example.org/logo.png"
-          :name "Adobe"
+          :name "Breach name"
           :is-spam-list false
           :added-date "2013-12-04T00:00:00Z"
           :is-verified true
           :is-retired false
-          :title "Adobe"
+          :title "Breach title"
           :pwn-count 152445165
           :breach-date "2013-10-04"
-          :domain "adobe.com"
+          :domain "example.org"
           :modified-date "2013-12-04T00:00:00Z"
           :is-sensitive false
           :data-classes ["Email addresses" "Password hints" "Passwords" "Usernames"])))))
 
+(deftest ^:integration get-all-test
+  (testing "gets all breaches"
+    (doseq [breach ["Verified breach" "Unverified breach"]]
+      (is (in-seq? {:name breach} (get-all)))))
+
+  (testing "gets breaches of specified domain"
+    (let [result (get-all "breach-name")]
+      (is (= (count result) 1))
+      (is (in-seq? {:name "Breach of a specific domain"} result)))))
+
+(deftest ^:integration get-for-name-test
+  (testing "gets breach by its name"
+    (is (= (:name (get-for-name "Breach name")) "Breach name"))))
+
+(deftest ^:integration get-data-classes-test
+  (testing "gets data classes"
+    (= (get-data-classes) ["Email addresses" "Password hints" "Passwords" "Usernames"])))

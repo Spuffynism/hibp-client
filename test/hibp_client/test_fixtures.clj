@@ -27,20 +27,23 @@
   {:non-truncated {:description "Breach description"
                    :is-fabricated false
                    :logo-path "https://example.org/logo.png"
-                   :name "Adobe"
+                   :name "Breach name"
                    :is-spam-list false
                    :added-date "2013-12-04T00:00:00Z"
                    :is-verified true
                    :is-retired false
-                   :title "Adobe"
+                   :title "Breach title"
                    :pwn-count 152445165
                    :breach-date "2013-10-04"
-                   :domain "adobe.com"
+                   :domain "example.org"
                    :modified-date "2013-12-04T00:00:00Z"
                    :is-sensitive false
                    :data-classes ["Email addresses" "Password hints" "Passwords" "Usernames"]}
    :unverified {:name "Unverified breach"}
-   :verified {:name "Verified breach"}})
+   :verified {:name "Verified breach"}
+   :of-domain {:name "Breach of a specific domain"}})
+
+(def data-classes ["Email addresses" "Password hints" "Passwords" "Usernames"])
 
 (defn mock-get
   "Mocks a http get request"
@@ -51,10 +54,14 @@
       (false? (:includeUnverified (:query-params req))) {:body (lazy-seq [(:verified breaches)])}
       (false? (:truncateResponse (:query-params req))) {:body (lazy-seq [(:non-truncated breaches)])}
       :else {:body (lazy-seq [(:verified breaches) (:unverified breaches)])})
-    (= url "https://haveibeenpwned.com/api/v3/breaches") {:body nil}
-    (= url "https://haveibeenpwned.com/api/v3/breach/breach-name")
-    {:body (lazy-seq [(:non-truncated breaches)])}
-    (= url "https://haveibeenpwned.com/api/v3/dataclasses") {:body nil}
+    (= url "https://haveibeenpwned.com/api/v3/breaches")
+    (if (:domain (:query-params req))
+      {:body (lazy-seq [(:of-domain breaches)])}
+      {:body (lazy-seq [(:verified breaches) (:unverified breaches)])})
+    (= url "https://haveibeenpwned.com/api/v3/breach/Breach name")
+    {:body (:non-truncated breaches)}
+    (= url "https://haveibeenpwned.com/api/v3/dataclasses")
+    {:body data-classes}
     (= url "https://haveibeenpwned.com/api/v3/pasteaccount/test@example.org") {:body nil}
     (= url "https://api.pwnedpasswords.com/range/ABCDE")
     {:body (str "0018A45C4D1DEF81644B54AB7F969B88D65:1"
