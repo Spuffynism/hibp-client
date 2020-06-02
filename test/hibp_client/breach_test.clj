@@ -1,20 +1,9 @@
 (ns hibp-client.breach-test
   (:require [clojure.test :refer :all]
             [hibp-client.breach :refer :all]
-            [hibp-client.api :as api]))
+            [hibp-client.test-fixtures :as test-fixtures]))
 
-(defn passthrough-get-json-body
-  "Returns the given arguments as a hash"
-  ([path] {:path path})
-  ([path configuration] {:path path :configuration configuration}))
-
-(defn redefine-get-json-body
-  "Redefines get json body calls"
-  [f]
-  (with-redefs [api/get-json-body passthrough-get-json-body]
-    (f)))
-
-(use-fixtures :each redefine-get-json-body)
+(use-fixtures :once test-fixtures/redefine-get-json-body)
 
 (deftest get-for-account-test
   (testing "uses renamed query params"
