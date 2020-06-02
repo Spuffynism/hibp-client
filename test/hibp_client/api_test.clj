@@ -1,8 +1,7 @@
 (ns hibp-client.api-test
   (:require [clojure.test :refer :all]
             [hibp-client.api :refer :all]
-            [clj-http.client :as http]
-            [hibp-client.api :as api]))
+            [clj-http.client :as http]))
 
 (deftest default-headers-test
   (let [user-agent-header "user-agent"]
@@ -100,7 +99,7 @@
       (with-redefs [http/post (fn [_ {:keys [query-params]}]
                                 (is (= query-params expected-query-params)))]
         (exists? nil {:query-params {:param "value"}}))))
-  
+
   (testing "uses form params"
     (let [expected-form-params {:param "value"}]
       (with-redefs [http/post (fn [_ {:keys [form-params]}]
