@@ -18,6 +18,8 @@ Run unit tests with `lein test`
 
 Run integration tests with `lein test :integration`
 
+Run all tests with `lein test :all`
+
 ## Development
 
 Use `lein test-refresh` to continuously run tests as code is changed.
@@ -29,7 +31,7 @@ Use `lein test-refresh` to continuously run tests as code is changed.
     - ~~breach~~
     - ~~paste~~
     - ~~pwned_password~~
- - write integration tests
+ - ~~write integration tests~~
     - ~~breach~~
     - ~~paste~~
-    - pwned_password
+    - ~~pwned_password~~

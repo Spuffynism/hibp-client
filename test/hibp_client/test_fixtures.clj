@@ -51,7 +51,7 @@
                         :date "2013-12-04T00:00:00Z"
                         :email-count 10}]))
 
-(defn mock-get
+(defn- mock-get
   "Mocks a http get request"
   [url & [req & _]]
   (cond
@@ -77,10 +77,10 @@
                 "011053FD0102E94D6AE2F8B83D76FAF94F6:1"
                 "012A7CA357541F0AC487871FEEC1891C49C:2"
                 "0136E006E24E7D152139815FB0FC6A50B15:2")}
-    :else (throw (Exception. " Undefined mocked api behavior "))))
+    :else (throw (Exception. (str "Undefined mocked api behavior for url " url)))))
 
 (defn mock-http-client
-  " Mocks the http client "
+  "Mocks the http client"
   [f]
   (with-redefs [http/get mock-get]
     (f)))
