@@ -7,6 +7,9 @@
                  [clj-http "3.7.0"]
                  [cheshire "5.8.0"]
                  [camel-snake-kebab "0.4.0"]]
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.24.1"]]
+                   :test-refresh {:quiet true
+                                  :changes-only true}}}
   :test-selectors {:default #(not (:integration %))
                    :integration :integration
                    :all (constantly true)})
