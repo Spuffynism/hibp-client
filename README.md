@@ -24,11 +24,11 @@ Use `lein test-refresh` to continuously run tests as code is changed.
 
 ## TODO
 
- - write unit tests
+ - ~~write unit tests~~
     - ~~api~~
     - ~~breach~~
-    - paste
-    - pwned_password
+    - ~~paste~~
+    - ~~pwned_password~~
  - write integration tests
     - breach
     - paste
