@@ -22,7 +22,7 @@ Run integration tests with `lein test :integration`
 
  - write unit tests
     - ~~api~~
-    - breach
+    - ~~breach~~
     - paste
     - pwned_password
  - write integration tests
