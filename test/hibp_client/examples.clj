@@ -8,10 +8,6 @@
 
 (defn -main [& args]
 
-  (println "Checking if a password is pwned")
-  (println (pwned-password/pwned? "12345"))
-  ;; => true
-
   (println "Listing pwned hashes for a password hash prefix")
   (println (pwned-password/list-for-range "21BD1"))
   ;; => 0018A45C4D1DEF81644B54AB7F969B88D65:1\n00D4F6E8FA6EECAD2A3AA415EEC418...
@@ -25,8 +21,8 @@
                                    {:truncate-response true}))
   ;; => ({:name 000webhost} {:name Adobe} {:name BitcoinTalk} {:name Bitly} {...
 
-  ;;(println "Getting all breaches")
-  ;;(println (breach/get-all))
+  (println "Getting all breaches")
+  (println (breach/get-all))
   ;; => ({:description In approximately March 2015, the free web hosting prov...
 
   (println "Getting all breaches for a domain")

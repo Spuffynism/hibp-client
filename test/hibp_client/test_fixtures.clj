@@ -8,8 +8,16 @@
   ([path] {:path path})
   ([path configuration] {:path path :configuration configuration}))
 
-(defn redefine-get-json-body
-  "Redefines get json body calls"
+(defn- passthrough-get-body
+  "Returns the given arguments as a hash"
+  ([path configuration] {:path path :configuration configuration})
+  ([path configuration extra-configuration] {:path path
+                                             :configuration configuration
+                                             :extra-configuration extra-configuration}))
+
+(defn make-api-passthrough
+  "Makes the api passthrough"
   [f]
-  (with-redefs [api/get-json-body passthrough-get-json-body]
+  (with-redefs [api/get-json-body passthrough-get-json-body
+                api/get-body passthrough-get-body]
     (f)))

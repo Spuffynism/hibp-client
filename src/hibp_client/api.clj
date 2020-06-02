@@ -29,18 +29,3 @@
    (get-json-body path nil))
   ([path configuration]
    (get-body path configuration {:accept :json :as :json-kebab-keys})))
-
-(defn exists?
-  "Indicates if a resource exists by checking the http status code"
-  ([path {:keys [query-params form-params]}]
-   (try
-     (->
-       (http/post
-         (str hibp-api-url path)
-         {:content-type :x-www-form-urlencoded
-          :headers (default-headers nil)
-          :query-params query-params
-          :form-params form-params})
-       :status
-       (= 200))
-     (catch Exception _ false))))

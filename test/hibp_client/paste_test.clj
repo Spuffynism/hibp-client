@@ -3,7 +3,7 @@
             [hibp-client.paste :refer :all]
             [hibp-client.test-fixtures :as test-fixtures]))
 
-(use-fixtures :once test-fixtures/redefine-get-json-body)
+(use-fixtures :once test-fixtures/make-api-passthrough)
 
 (deftest get-for-account-test
   (testing "checks that account is specified"
