@@ -10,11 +10,9 @@
     (is (thrown? AssertionError (get-for-account "api-key" nil))))
 
   (testing "builds path from account"
-    (is (=
-          (:path (get-for-account "api-key" "test@example.org"))
-          "/pasteaccount/test@example.org")))
+    (is (= (:path (get-for-account "api-key" "test@example.org"))
+           "/pasteaccount/test@example.org")))
 
   (testing "uses api key"
-    (is (=
-          (:configuration (get-for-account "api-key" "test@example.org"))
-          {:api-key "api-key"}))))
+    (is (= (:configuration (get-for-account "api-key" "test@example.org"))
+           {:api-key "api-key"}))))
