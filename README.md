@@ -1,3 +1,5 @@
+[![Clojars Project](https://img.shields.io/clojars/v/hibp-client.svg)](https://clojars.org/hibp-client)
+
 # hibp-client
 
 hibp-client is a clojure library that wraps the [Have I been pwned API v3](https://haveibeenpwned.com/API/v3).
@@ -7,10 +9,6 @@ hibp-client is a clojure library that wraps the [Have I been pwned API v3](https
 See [examples](test/hibp_client/examples.clj).
 
 Some calls need an api key. See [Authorisation](https://haveibeenpwned.com/API/v3#Authorisation) from the official HIBP documentation.
-
-## Installation
-
-hibp-client is available as a Maven artifact from [Clojars](https://clojars.org/hibp-client).
 
 ## Running tests
 
@@ -23,15 +21,3 @@ Run all tests with `lein test :all`
 ## Development
 
 Use `lein test-refresh` to continuously run tests as code is changed.
-
-## TODO
-
- - ~~write unit tests~~
-    - ~~api~~
-    - ~~breach~~
-    - ~~paste~~
-    - ~~pwned_password~~
- - ~~write integration tests~~
-    - ~~breach~~
-    - ~~paste~~
-    - ~~pwned_password~~
