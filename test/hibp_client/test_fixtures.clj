@@ -45,14 +45,22 @@
 
 (def data-classes ["Email addresses" "Password hints" "Passwords" "Usernames"])
 
+(def pastes (lazy-seq [{:source "source"
+                        :id "id"
+                        :title "title"
+                        :date "2013-12-04T00:00:00Z"
+                        :email-count 10}]))
+
 (defn mock-get
   "Mocks a http get request"
-  [url & [req & r]]
+  [url & [req & _]]
   (cond
     (= url "https://haveibeenpwned.com/api/v3/breachedaccount/test@example.org")
     (cond
-      (false? (:includeUnverified (:query-params req))) {:body (lazy-seq [(:verified breaches)])}
-      (false? (:truncateResponse (:query-params req))) {:body (lazy-seq [(:non-truncated breaches)])}
+      (false? (:includeUnverified (:query-params req)))
+      {:body (lazy-seq [(:verified breaches)])}
+      (false? (:truncateResponse (:query-params req)))
+      {:body (lazy-seq [(:non-truncated breaches)])}
       :else {:body (lazy-seq [(:verified breaches) (:unverified breaches)])})
     (= url "https://haveibeenpwned.com/api/v3/breaches")
     (if (:domain (:query-params req))
@@ -62,7 +70,7 @@
     {:body (:non-truncated breaches)}
     (= url "https://haveibeenpwned.com/api/v3/dataclasses")
     {:body data-classes}
-    (= url "https://haveibeenpwned.com/api/v3/pasteaccount/test@example.org") {:body nil}
+    (= url "https://haveibeenpwned.com/api/v3/pasteaccount/test@example.org") {:body pastes}
     (= url "https://api.pwnedpasswords.com/range/ABCDE")
     {:body (str "0018A45C4D1DEF81644B54AB7F969B88D65:1"
                 "00D4F6E8FA6EECAD2A3AA415EEC418D38EC:2"

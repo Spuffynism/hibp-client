@@ -30,6 +30,6 @@ Use `lein test-refresh` to continuously run tests as code is changed.
     - ~~paste~~
     - ~~pwned_password~~
  - write integration tests
-    - breach
-    - paste
+    - ~~breach~~
+    - ~~paste~~
     - pwned_password
