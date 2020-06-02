@@ -3,57 +3,51 @@
             [hibp-client.breach :refer :all]
             [hibp-client.api :as api]))
 
+(defn passthrough-get-json-body
+  "Returns the given arguments as a hash"
+  ([path] {:path path})
+  ([path configuration] {:path path :configuration configuration}))
+
+(defn redefine-get-json-body
+  "Redefines get json body calls"
+  [f]
+  (with-redefs [api/get-json-body passthrough-get-json-body]
+    (f)))
+
+(use-fixtures :each redefine-get-json-body)
+
 (deftest get-for-account-test
   (testing "uses renamed query params"
-    (with-redefs [api/get-json-body
-                  (fn [_ {:keys [query-params]}]
-                    (is (contains? query-params :truncateResponse)))]
-      (get-for-account "api-key" "test@example.com" {:truncate-response true})))
+    (let [{:keys [configuration]}
+          (get-for-account "api-key" "test@example.com" {:truncate-response true})]
+      (is (contains? (:query-params configuration) :truncateResponse))))
 
   (testing "uses api key"
-    (with-redefs [api/get-json-body
-                  (fn [_ {:keys [api-key]}]
-                    (is (= api-key "api-key")))]
-      (get-for-account "api-key" "test@example.com")))
+    (let [{:keys [configuration]} (get-for-account "api-key" "test@example.com")]
+      (is (= (:api-key configuration) "api-key"))))
 
   (testing "builds account path"
-    (with-redefs [api/get-json-body
-                  (fn [path]
-                    (is path "/breachedaccount/test@example.com"))]
-      (get-for-account "api-key" "test@example.com"))))
+    (let [{:keys [path]} (get-for-account "api-key" "test@example.com")]
+      (is (= path "/breachedaccount/test@example.com")))))
 
 (deftest get-all-test
   (testing "gets breaches path"
-    (with-redefs [api/get-json-body
-                  (fn [path]
-                    (is (= path "/breaches")))]
-      (get-all)))
+    (is (= (:path (get-all)) "/breaches")))
 
   (testing "params are not present if domain is absent"
-    (with-redefs [api/get-json-body
-                  (fn [_ params]
-                    (is (nil? params)))]
-      (get-all)))
+    (is (nil? (:configuration (get-all)))))
 
   (testing "specifies domain in query params if present"
-    (with-redefs [api/get-json-body
-                  (fn [_ {:keys [query-params]}]
-                    (is (= query-params {:domain "example.org"})))]
-      (get-all "example.org"))))
+    (let [{:keys [configuration]} (get-all "example.org")]
+      (is (= (:query-params configuration) {:domain "example.org"})))))
 
 (deftest get-for-name-test
   (testing "checks that name is present"
     (is (thrown? AssertionError (get-for-name nil))))
 
   (testing "builds breach path"
-    (with-redefs [api/get-json-body
-                  (fn [path]
-                    (is path "/breach/breach-name"))]
-      (get-for-name "breach-name"))))
+    (is (= (:path (get-for-name "breach-name")) "/breach/breach-name"))))
 
 (deftest get-data-classes-test
   (testing "gets dataclasses path"
-    (with-redefs [api/get-json-body
-                  (fn [path]
-                    (is path "/dataclasses"))]
-      (get-data-classes))))
+    (is (= (:path (get-data-classes)) "/dataclasses"))))
